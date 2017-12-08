@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sytner.Auto
+namespace AutomationTest.Share
 {
     public class Class1
     {
