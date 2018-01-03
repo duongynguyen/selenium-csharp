@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using AutomationTest.Core.Action;
 using AutomationTest.Core.Configuration;
 using AutomationTest.Core.Report;
@@ -27,7 +23,7 @@ namespace AutomationTest.Core.Extensions
             _appConfiguration = new AppConfiguration();
         }
 
-        public IWebDriver Launch(string browser, strinng site)
+        public IWebDriver Launch(string browser, string site)
         {
             IWebDriver driver = null;
             try

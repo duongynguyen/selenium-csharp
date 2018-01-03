@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using AutomationTest.Core.Configuration;
+using AutomationTest.Core.Extensions;
+using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace AutomationTest.Core.Action
 {
@@ -26,7 +27,7 @@ namespace AutomationTest.Core.Action
         protected BasePage(IWebElement webDriver)
         {
             Log = new Log();
-            _webDriver = webDriverl
+            _webDriver = webDriver;
             _appConfiguration = new AppConfiguration();
 
             // Set time
@@ -116,7 +117,7 @@ namespace AutomationTest.Core.Action
             return by;
         }
 
-        public By GetBy(string controlName, value)
+        public By GetBy(string controlName, string value)
         {
             By by = null;
             try
