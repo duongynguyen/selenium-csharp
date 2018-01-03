@@ -301,9 +301,235 @@ namespace AutomationTest.Core.Action
                 Click(controlName, value);
             }
         }
-            
-        #endregion
 
+        protected void UncheckTheCheckbox(string controlName)
+        {
+            WaitForControl(controlName, _timeWait);
+            _element = FindElement(controlName);
+            if (_element.Selected)
+            {
+                Click(controlName);
+            }
+        }
+            
+        #endregion Checkbox
+
+        #region Combobox - DropDownList
+
+        protected string GetItemSelectedCombobox(string controlName)
+        {
+            _element = FindElement(controlName);
+            SelectElement select = new SelectElement(_element);
+            string itemSelected = select.SelectedOption.ToString();
+
+            return itemSelected;
+        }
+
+        protected string GetItemSelectedCombobox(string controlName, string value)
+        {
+            _element = FindElement(controlName, value);
+            SelectElement select = new SelectElement(_element);
+            string itemSelected = select.SelectedOption.ToString();
+
+            return itemSelected;
+        }
+
+        protected void SelectItemCombobox(string controlName, string item)
+        {
+            _element = FindElement(controlName);
+            SelectElement select = new SelectElement(_element);
+            select.SelectByText(item);
+        }
+
+        protected void SelectItemCombobox(string controlName, string value, string item)
+        {
+            _element = FindElement(controlName, value);
+            SelectElement select = new SelectElement(_element);
+            select.SelectByText(item);
+        }
+
+        protected void SelectDropDownListItem(string locator, string item)
+        {
+            _element = FindElement(locator);
+
+            new SelectElement(_element).SelectByText(item);
+        }
+
+        protected void SelectDropDownListItem(string locator, int item)
+        {
+            _element = FindElement(locator);
+
+            new SelectElement(_element).SelectByIndex(item);
+        }
+
+        protected void SelectDropdownList(string element, string controlName, string value)
+        {
+            try
+            {
+                Actions action;
+                Click(element);
+                WaitForControl(controlName, _timeControlWait);
+                IList<IWebElement> listElement = FindElements(controlName);
+                foreach (IWebElement option in listElement)
+                {
+                    action = new Actions(_webDriver);
+                    if (option.Text == value)
+                    {
+                        option.Click();
+                        break;
+                    }
+                    else
+                    {
+                        action.SendKeys(Keys.ArrowDown).Perform();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string functionName = MethodInfo.GetCurrentMethod().Name;
+                HandlException(ex, functionName);
+            }
+        }
+
+        protected void SelectDropdownListHaveLoadData(string element, string controlName, string value, string elementLoad)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    Click(element);
+                    Sleep(1);
+                    WaitForElementInvisible(elementLoad, 15);
+                    Click(element);
+                    Sleep(1);
+                    IList<IWebElement> listElement = FindElements(controlName);
+                    foreach (IWebElement option in listElement)
+                    {
+                        Actions action = new Actions(_webDriver);
+                        if(optrion.Text == value)
+                        {
+                            option.Click();
+                            Sleep(1);
+                            break;
+                        }
+                        else
+                        {
+                            action.SendKeys(Keys.ArrowDown).Perform();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string functionName = MethodInfo.GetCurrentMethod().Name;
+                HandlException(ex, functionName);
+            }
+        }
+
+        protected void TypeAndSelectDropdownList(string element, string controlName, string typeValue)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(typeValue))
+                {
+                    Actions action = new Actions(_webDriver);
+                    Type(element, typeValue);
+                    Sleep(1);
+                    WaitForLoadPage();
+                    IList<IWebElement> listElement = FindElements(controlName);
+                    foreach (IWebElement option in listElement)
+                    {
+                       if(options.Text == typeValue) 
+                       {
+                           options.Click();
+                           Sleep(1);
+                           break;                           
+                       }
+                       else
+                       {
+                           action.SendKeys(Keys.ArrowDown).Perform();
+                       }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string functionName = MethodInfo.GetCurrentMethod().Name;
+                HandlException(ex, functionName);
+            }
+        }
+
+        protected void SelectIndexOnDropdownByJavaScript(string idDropdownList, string controlName)
+        {
+            WaitForLoadPage();
+            var currentValue = GetText(controlName);
+
+            if (currentValue.Contains("Select One"))
+            {
+                ExecuteJavaScript("$('#" + idDropdownList + "').data('kendoDropDownList').select(" + 1 + ")");
+            }
+            else
+            {
+                ExecuteJavaScript("$('#" + idDropdownList + "').data('kendoDropDownList').select(" + 0 + ")");
+            }
+
+            ExecuteJavaScript("$('#" + idDropdownList + "').data('kendoDropDownList').trigger('change')");
+        }
+
+        protected void SelectIndexOnComboBoxByJavaScript(string idComboBox)
+        {
+            WaitForLoadPage();
+            ExecuteJavaScript("$('#" + idComboBox + "').data('kendoComboBox').select(" + 0 + ")");
+        }
+            
+        #endregion Combobox - DropDownList
+
+        #region Alert
+
+        protected void AcceptJavascriptAlert()
+        {
+            IAlert alert = _webDriver.SwitchTo().Alert();
+            alert.Accept();
+        }
+
+        protected void DismissJavascriptAlert()
+        {
+            IAlert alert = _webDriver.SwitchTo().Alert();
+            alert.Dismiss();
+        }
+
+        public void HideAlertBox()
+        {
+            string alertBoxPath = "//as-alert-box[contains(@position,'right')]";
+
+            if (CountElement(alertBoxPath) != 0)
+            {
+                SetAttribute(alertBoxPath, "style", "display:none");
+            }
+        }
+            
+        #endregion Alert
+
+        #endregion Control
+
+        #region Browser
+
+        protected void Refresh()
+        {
+            _webDriver.Navigate().Refresh();
+            Sleep(_timeSleep);
+        }
+
+        public void BackOnePage()
+        {
+            Back();
+        }
+
+        protected void Back()
+        {
+            
+        }
+            
         #endregion
 
         #region Element
